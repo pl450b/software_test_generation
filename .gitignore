@@ -1,2 +1,7 @@
 venv/
-Code_Vulnerability_Security_DPO
+Code_Vulnerability_Security_DPO/
+DiverseVul/
+old_tests/
+good.csv
+bad.csv
+./DiverseVul-Cleaned.csv

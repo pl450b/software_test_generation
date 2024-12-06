@@ -5,4 +5,7 @@ ollama
 torch
 transformers
 tqdm
-git+https://github.com/unslothai/unsloth.git#egg=unsloth[colab-new] # this is the nighly version
+scikit-learn
+sctokenizer
+kagglehub
+faiss-cpu # use faiss-gpu if possible

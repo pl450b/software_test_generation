@@ -5,3 +5,4 @@ old_tests/
 good.csv
 bad.csv
 ./DiverseVul-Cleaned.csv
+./faiss_index.bin

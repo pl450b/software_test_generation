@@ -10,6 +10,7 @@ import time
 import os
 import kagglehub
 
+# If dataset not downloaded, grab it from kaggle
 if os.path.isfile('./DiverseVul-Cleaned.csv'):
     print("DiverseVul-Cleaned.csv file found, continuing...")
 else:

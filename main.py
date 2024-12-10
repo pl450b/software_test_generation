@@ -11,15 +11,13 @@ import os
 import kagglehub
 
 # If dataset not downloaded, grab it from kaggle
-if os.path.isfile('./DiverseVul-Cleaned.csv'):
-    print("DiverseVul-Cleaned.csv file found, continuing...")
-else:
-    print("DiverseVul-Cleaned.csv not found, pulling from Kaggle")
-    path = kagglehub.dataset_download("ahmedtabib/diversevul-cleaned")
-    print("Saved to path: ", path)
+print("Grabbing DiverseVul-Cleaned.csv dataset")
+path = kagglehub.dataset_download("ahmedtabib/diversevul-cleaned")
+path = path + "/DiverseVul-Cleaned.csv"
+print("Dataset path: ", path)
 
 # import dataset into dataframe, keep specific columns
-df_divul = pd.read_csv("./DiverseVul/DiverseVul-Cleaned.csv", low_memory=False)
+df_divul = pd.read_csv(path, low_memory=False)
 df_divul = df_divul.drop(columns=['Unnamed: 0', 'commit_id', 'project', 'hash', 'size', 'target'])
 
 # Seperate into good/bad code dataframes
@@ -46,21 +44,20 @@ index = faiss.IndexFlatL2(768) # 768 for the dimention
 # Process rows and generate embeddings
 for col, row in tqdm(df_bad.iterrows(), total=len(df_bad), desc="Processing rows"):
     # Tokenize code
-    code_tokens = tokenizer.tokenize(row['func'])
-    tokens = [tokenizer.cls_token] + code_tokens + [tokenizer.eos_token]
-    
-    # Convert tokens to token IDs
-    tokens_ids = tokenizer.convert_tokens_to_ids(tokens)
-    print(row['func'])
-    print(tokens)
-    print(f"Number of tokens: {len(tokens_ids)}")
+    # Tokenize and process row
+    inputs = tokenizer.encode_plus(
+        row['func'], 
+        max_length=512, 
+        truncation=True, 
+        padding="max_length", 
+        return_tensors="pt"
+    )
+
+    tokens_tensor = inputs["input_ids"]
 
     # Generate embeddings
     with torch.no_grad():  # Disable gradients for efficiency
-        tokens_tensor = torch.tensor(tokens_ids)[None, :]  # Add batch dimension
-        print("test1")
         context_embeddings = model(tokens_tensor)[0]  # Get hidden states
-        print("test2")
         cls_embedding = context_embeddings[:, 0, :]  # Extract the [CLS] embedding
     
     print(f"CLS embedding shape: {cls_embedding.shape}")

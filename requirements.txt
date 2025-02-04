@@ -8,4 +8,5 @@ tqdm
 scikit-learn
 sctokenizer
 kagglehub
-faiss-cpu # use faiss-gpu if possible
+faiss-cpu # use faiss-gpu maybe
+

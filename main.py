@@ -20,11 +20,12 @@ print("Dataset path: ", path)
 df_divul = pd.read_csv(path, low_memory=False)
 df_divul = df_divul.drop(columns=['Unnamed: 0', 'commit_id', 'project', 'hash', 'size', 'target'])
 
-# Seperate into good/bad code dataframes
+# Seperate bad code into a dataframe
 df_bad = df_divul[df_divul['cwe'] != '[]']
 df_bad_msg = df_bad.drop(columns=['func', 'cwe'])
 df_bad = df_bad.reset_index(drop=True)
 
+# Seperate good code into a dataframe
 df_good = df_divul[df_divul['cwe'] == '[]']
 df_good_msg = df_good.drop(columns=['func', 'cwe'])
 df_good = df_good.reset_index(drop=True)
